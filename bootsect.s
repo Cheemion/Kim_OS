@@ -77,6 +77,11 @@ ok_load_setup:
 	mov	bp,#msg1
 	mov	ax,#0x1301		! write string, move cursor
 	int	0x10
+	
+
+
+
+
 
 sectors:
 	.word 0
@@ -85,6 +90,12 @@ msg1:
 	.byte 13,10
 	.ascii "KimOS Loading  ..."
 	.byte 13,10,13,10
+
+.org 508
+root_dev:
+	.word ROOT_DEV
+boot_flag:
+	.word 0xAA55
 
 .text
 endtext:	
