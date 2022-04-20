@@ -68,7 +68,7 @@ ok_load_setup:
 
 ! Print some inane message
 
-again:	mov	ah,#0x03		! read cursor pos
+	mov	ah,#0x03		! read cursor pos
 	xor	bh,bh
 	int	0x10
 	
@@ -77,8 +77,7 @@ again:	mov	ah,#0x03		! read cursor pos
 	mov	bp,#msg1
 	mov	ax,#0x1301		! write string, move cursor
 	int	0x10
-	j again	
-	
+stop:	j stop
 
 sectors:
 	.word 0
