@@ -1,5 +1,0 @@
-#!/bin/sh
-
-./bochs-gdb -q -f bochsrc.bxrc
-
-
