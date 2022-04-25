@@ -17,8 +17,8 @@ public:
 	uint32_t Limit();
     } __attribute__((packed));
     
-    SegmentDescriptor nullSegmentSelector;
-    SegmentDescriptor unusedSegmentSelector;
+    SegmentDescriptor nullSegmentSelector; // the first segment descriptor never used
+    SegmentDescriptor unusedSegmentSelector; //
     SegmentDescriptor codeSegmentSelector;
     SegmentDescriptor dataSegmentSelector;
 

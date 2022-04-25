@@ -3,11 +3,12 @@
 GlobalDescriptorTable::GlobalDescriptorTable() :
 nullSegmentSelector(0, 0, 0),
 unusedSegmentSelector(0, 0, 0),
-codeSegmentSelector(0, 64*1024*1024, 0x9A),
-dataSegmentSelector(0, 64*1024*1024, 0x92) {
+codeSegmentSelector(0, 64*1024*1024, 0x9A), //0x1001,1010, 1 means in memory, 00 means highest priority, 1 means code or data, 1010 means code read or write
+dataSegmentSelector(0, 64*1024*1024, 0x92) { // 0x1001,0010, 0010means datasegment read or write
     uint32_t i[2];
     i[0] = (uint32_t)this;
-    i[1] = sizeof(GlobalDescriptorTable) << 16; //2^16 items of GDT that is 65536 items of XXX
+    i[1] = sizeof(GlobalDescriptorTable) << 16; // size of tables
+    // Loads the values in the source operand into the global descriptor table register (GDTR) or the interrupt descriptor table register (IDTR). The source operand specifies a 6-byte memory location that contains the base address (a linear address) and the limit (size of table in bytes) of the global descriptor table (GDT) or the interrupt descriptor table (IDT)
     //using this table
     asm volatile("lgdt (%0)": :"p" (((uint8_t *)i)+2));
 }
@@ -26,7 +27,7 @@ uint16_t GlobalDescriptorTable::CodeSegmentSelector() {
 GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,uint32_t limit, uint8_t flags) {
     uint8_t* target = (uint8_t*)this;
     //setting limit
-    if(limit <= 65536) { // range from 1 byte to 1MiB
+    if(limit <= 65536) { // range from 1 byte to 2^16 byte
 	target[6] = 0x40; //0100,0000, high 4 bits are settings for GDT
     } else {
 	if((limit & 0xFFF) != 0xFFF)
