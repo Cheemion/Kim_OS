@@ -26,3 +26,5 @@ mykernel.iso: mykernel.bin
 	echo '  multiboot /boot/mykernel.bin' >> iso/boot/grub/grub.cfg
 	echo '  boot' >> iso/boot/grub/grub.cfg
 	echo '}' >> iso/boot/grub/grub.cfg
+	grub-mkrescue --output=$@ iso
+	rm -rf iso
