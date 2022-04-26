@@ -25,8 +25,6 @@ public:
 
     virtual void Write(uint8_t data);
     virtual uint8_t Read();
-protected:
-private:
 };
 
 class Port16Bit : public Port
@@ -40,8 +38,6 @@ public:
 
     virtual void Write(uint16_t data);
     virtual uint16_t Read();
-protected:
-private:
 };
 
 class Port32Bit : public Port
@@ -55,8 +51,6 @@ public:
 
     virtual void Write(uint32_t data);
     virtual uint32_t Read();
-protected:
-private:
 };
 
 
@@ -70,8 +64,5 @@ public:
      ~Port8BitSlow();
 
     virtual void Write(uint8_t data);
-    virtual uint8_t Read();
-protected:
-private:
 };
 #endif
