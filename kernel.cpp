@@ -41,7 +41,8 @@ extern "C" void callConstructors() {
 
 
 extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
-  printf("Hello World!");
+  printf("Hello World!\n");
+  printf("Welcome to KimOS\n");
   GlobalDescriptorTable gdt;
   while(1);
 }
