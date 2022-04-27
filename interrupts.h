@@ -32,8 +32,8 @@ public:
     ~InterruptManager();
     void Activate();
     static uint32_t handleInterrupt(uint8_t interrupt, uint32_t esp);
-    static uint32_t IgnoreInterruptRequest();
-    static uint32_t HandleInterruptRequest0x00();
-    static uint32_t HandleInterruptRequest0x01();
+    static void IgnoreInterruptRequest();
+    static void HandleInterruptRequest0x00();
+    static void HandleInterruptRequest0x01();
 };
 #endif
