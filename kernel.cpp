@@ -1,5 +1,6 @@
 #include "types.h"
 #include "gdt.h"
+#include "interrupts.h"
 
 // the screen is 25 height * 80 width
 void printf(char* str) {
@@ -42,7 +43,9 @@ extern "C" void callConstructors() {
 
 extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   printf("Hello World!\n");
-  printf("Welcome to KimOS\n");
+  printf("Welcome to KimOS");
   GlobalDescriptorTable gdt;
+  InterruptManager InterruptManager(&gdt);
+  InterruptManager.Activate();
   while(1);
 }

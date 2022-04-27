@@ -24,6 +24,8 @@ Port8Bit::Port8Bit(uint16_t portnumber): Port(portnumber) {
 
 Port8Bit::~Port8Bit() {}
 
+//"a" means %eax,%ax,%al
+//"Nd", N means 0 to 255, d means %edx, %dx, %dl
 void Port8Bit::Write(uint8_t data) {
     __asm__ volatile("outb %0, %1"
 		     :
