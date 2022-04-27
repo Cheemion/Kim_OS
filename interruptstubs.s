@@ -23,6 +23,7 @@ HandleInterruptRequest 0x00
 HandleInterruptRequest 0x01
 	
 int_bottom:
+
 	pusha
 	pushl %ds
 	pushl %es
@@ -32,6 +33,7 @@ int_bottom:
 	pushl %esp
 	pushl (interruptnumber)
 	call _ZN16InterruptManager15handleInterruptEhj
+	# addl $5, %esp
 	movl %eax, %esp	
 
 	popl %gs
@@ -39,6 +41,7 @@ int_bottom:
 	popl %es
 	popl %ds
 	popa
+
 _ZN16InterruptManager22IgnoreInterruptRequestEv:	
 	iret
 .data
