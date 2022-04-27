@@ -1,6 +1,9 @@
 .set IRQ_BASE, 0x20
+
 .section .text
+
 .extern _ZN16InterruptManager15handleInterruptEhj
+
 .global _ZN16InterruptManager22IgnoreInterruptRequestEv
 
 
