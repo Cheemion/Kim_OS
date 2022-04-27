@@ -23,7 +23,6 @@ HandleInterruptRequest 0x00
 HandleInterruptRequest 0x01
 	
 int_bottom:
-	;; save regeisters before jumping into handler
 	pusha
 	pushl %ds
 	pushl %es
@@ -33,9 +32,8 @@ int_bottom:
 	pushl %esp
 	pushl (interruptnumber)
 	call _ZN16InterruptManager15handleInterruptEhj
-	movl %eax, %esp		; this is the return value
+	movl %eax, %esp	
 
-	;; restore all the registers
 	popl %gs
 	popl %fs
 	popl %es
