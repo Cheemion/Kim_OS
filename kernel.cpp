@@ -43,9 +43,12 @@ extern "C" void callConstructors() {
 
 extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   printf("Hello World!\n");
-  printf("Welcome to KimOS");
+  printf("Welcome to KimOS\n");
   GlobalDescriptorTable gdt;
-  InterruptManager InterruptManager(&gdt);
-  InterruptManager.Activate();
+  printf("done generating gdt\n");
+  InterruptManager interruptManager(&gdt);
+  printf("done generating nterruptManager\n");
+  interruptManager.Activate();
+  printf("done Activating\n");
   while(1);
 }
