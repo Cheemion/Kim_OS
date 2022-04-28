@@ -10,7 +10,7 @@ class InterruptHandler {
 protected:
     uint8_t interruptNumber;
     InterruptManager* interruptManager;
-private:
+public:
     InterruptHandler(uint8_t interruptNumber, InterruptManager* interruptManager);
     ~InterruptHandler();
 public:
