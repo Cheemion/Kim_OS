@@ -37,7 +37,6 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
             case 0x09: printf("8"); break;
             case 0x0A: printf("9"); break;
             case 0x0B: printf("0"); break;
-
             case 0x10: printf("q"); break;
             case 0x11: printf("w"); break;
             case 0x12: printf("e"); break;
@@ -48,7 +47,6 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
             case 0x17: printf("i"); break;
             case 0x18: printf("o"); break;
             case 0x19: printf("p"); break;
-
             case 0x1E: printf("a"); break;
             case 0x1F: printf("s"); break;
             case 0x20: printf("d"); break;
@@ -58,7 +56,6 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
             case 0x24: printf("j"); break;
             case 0x25: printf("k"); break;
             case 0x26: printf("l"); break;
-
             case 0x2C: printf("y"); break;
             case 0x2D: printf("x"); break;
             case 0x2E: printf("c"); break;
@@ -66,7 +63,7 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
             case 0x30: printf("b"); break;
             case 0x31: printf("n"); break;
             case 0x32: printf("m"); break;
-
+            case 0x1C: printf("\n"); break;
 	    case 0xFA: break;
 	    case 0x45: case 0xC5: break;
 	    default:
