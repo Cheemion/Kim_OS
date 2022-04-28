@@ -1,8 +1,9 @@
 #include "interrupts.h"
+#include "types.h"
 
 void printf(char *str);
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
-
+InterruptManager* InterruptManager::ActiveInterruptManager = 0;
 void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
     uint16_t CodeSegment, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t DescriptorType)
 {
@@ -55,13 +56,34 @@ picSlaveData(0xA1)
     idt.base = (uint32_t)interruptDescriptorTable;
     asm volatile("lidt %0" : : "m" (idt));
 }
+void InterruptManager::Deactivate(){
+
+    if(ActiveInterruptManager == this) {
+	ActiveInterruptManager = 0;
+	__asm__ volatile("cli");
+    }
+}
+
 void InterruptManager::Activate(){
+
+    if(ActiveInterruptManager != 0)
+	ActiveInterruptManager->Deactivate();
+    
+    ActiveInterruptManager = this;
     __asm__ volatile("sti");
 }
-InterruptManager::~InterruptManager(){
+InterruptManager::~InterruptManager() {}
+
+
+uint32_t InterruptManager::DoHandleInterrupt(uint8_t interruptNumber, uint32_t esp) {
+    printf(" INTERRUPT\n");
     
+    return esp;
 }
-uint32_t InterruptManager::handleInterrupt(uint8_t interrupt, uint32_t esp) {
-    printf("interrupt\n");
+
+uint32_t InterruptManager::handleInterrupt(uint8_t  interruptNumber, uint32_t esp) {
+    if(ActiveInterruptManager != 0) {
+	return ActiveInterruptManager->DoHandleInterrupt(interruptNumber, esp);
+    }
     return esp;
 }
