@@ -2,6 +2,7 @@
 #include "gdt.h"
 #include "interrupts.h"
 #include "keyboard.h"
+#include "mouse.h"
 
 // the screen is 25 height * 80 width
 void printf(char* str) {
@@ -52,6 +53,7 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
 
 
   KeyboardDriver keyboard(&interrupts);
+  MouseDriver mouse(&interrupts);
 
 
   interrupts.Activate();
