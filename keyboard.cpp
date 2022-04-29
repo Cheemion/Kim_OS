@@ -25,7 +25,6 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
     uint8_t key = dataport.Read();
     static bool Shift = false;
     
-    if(key < 0x80) { // only focus on the pressing
 	//when pressing the key, we got a interrupt with the highest bit being the zero
 	//when reselasing the key, we got a interrupt with the least bit being the one
 	switch(key) {
@@ -79,12 +78,14 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
 	    case 0x2A: case 0x36: Shift = true; break;
 	    case 0xAA: case 0x86: Shift = false; break;
 	    default:
-		char* foo = "KEYBOARD 0x00";
-		char* hex = "0123456789ABCDEF";
-		foo[11] = hex[(key >> 4) & 0x0F];
-		foo[12] = hex[key & 0x0F];
-		printf(foo);
+		if(key < 0x80) { // only focus on the pressing
+		    char* foo = "KEYBOARD 0x00";
+		    char* hex = "0123456789ABCDEF";
+		    foo[11] = hex[(key >> 4) & 0x0F];
+		    foo[12] = hex[key & 0x0F];
+		    printf(foo);
+		}
+		break;
 	}
-    }
     return esp;
 }
