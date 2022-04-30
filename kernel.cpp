@@ -34,6 +34,27 @@ void printf(char* str) {
     }
 }
 
+void printfHex(uint8_t key) {
+    char* foo = "00";
+    char* hex = "0123456789ABCDEF";
+    foo[0] = hex[(key >> 4) & 0x0F];
+    foo[1] = hex[key & 0x0F];
+    printf(foo);
+}
+
+class PrintfKeyboardEverntHandler : public KeyboardEventHandler {
+public:
+    void OnKeyDown(char c){
+	char* foo = " ";
+	foo[0] = c;
+	printf(foo);
+    }
+    void OnKeyUp(char c){
+	
+    }
+};
+
+
 typedef void (*constructor)();
 extern "C" constructor start_ctors; 
 extern "C" constructor end_ctors;
@@ -51,7 +72,9 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   printf("Initializing Hardware, Stage 1 \n");
 
   DriverManager drvManager;
-  KeyboardDriver keyboard(&interrupts);
+
+  PrintfKeyboardEverntHandler kbhandler;
+  KeyboardDriver keyboard(&interrupts, &kbhandler);
   drvManager.AddDriver(&keyboard);
   MouseDriver mouse(&interrupts);
   drvManager.AddDriver(&mouse);
