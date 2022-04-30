@@ -1,9 +1,14 @@
-#include "types.h"
-#include "gdt.h"
-#include "interrupts.h"
-#include "driver.h"
-#include "keyboard.h"
-#include "mouse.h"
+#include "../include/common/types.h"
+#include "../include/gdt.h"
+#include "../include/hardwarecommunication/interrupts.h"
+#include "../include/drivers/driver.h"
+#include "../include/drivers/keyboard.h"
+#include "../include/drivers/mouse.h"
+
+using namespace myos;
+using namespace myos::common;
+using namespace myos::drivers;
+using namespace myos::hardwarecommunication;
 
 // the screen is 25 height * 80 width
 void printf(char* str) {

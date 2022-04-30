@@ -1,7 +1,12 @@
-#ifndef __PORT_H
-#define __PORT_H
-#include "types.h"
+#ifndef __MYOS__HARDWARECOMMUNICATION__PORT_H
+#define __MYOS__HARDWARECOMMUNICATION__PORT_H
+#include "../common/types.h"
 
+using myos::common::uint16_t;
+using myos::common::uint8_t;
+using myos::common::uint32_t;
+namespace myos {
+    namespace hardwarecommunication {
 
 class Port
 {
@@ -65,4 +70,6 @@ public:
 
     virtual void Write(uint8_t data);
 };
+    }
+}
 #endif

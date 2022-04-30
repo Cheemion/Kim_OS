@@ -1,5 +1,6 @@
-#include "gdt.h"
-#include "types.h"
+#include "../include/gdt.h"
+using namespace myos;
+using namespace myos::common;
 GlobalDescriptorTable::GlobalDescriptorTable()
     : nullSegmentSelector(0, 0, 0),
         unusedSegmentSelector(0, 0, 0),

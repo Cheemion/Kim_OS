@@ -1,5 +1,5 @@
-#include "driver.h"
-
+#include "../../include/drivers/driver.h"
+using namespace myos::drivers;
 Driver::Driver() {}
 
 Driver::~Driver() {}

@@ -1,6 +1,12 @@
-#ifndef __GDT_H
-#define __GDT_H
-#include "types.h"
+#ifndef __MYOS__GDT_H
+#define __MYOS__GDT_H
+#include "common/types.h"
+
+using myos::common::uint16_t;
+using myos::common::uint32_t;
+using myos::common::uint8_t;
+
+namespace myos {
 class GlobalDescriptorTable {
 public:
     class SegmentDescriptor {
@@ -28,4 +34,5 @@ public:
     uint16_t CodeSegmentSelector();
     uint16_t DataSegmentSelector();
 };
+}
 #endif

@@ -1,8 +1,14 @@
-#ifndef __INTERRUPTS_H
-#define __INTERRUPTS_H
-#include "types.h"
-#include "port.h"
-#include "gdt.h"
+#ifndef __MYOS__HARDWARECOMMUNICSTION__INTERRUPTS_H
+#define __MYOS__HARDWARECOMMUNICSTION__INTERRUPTS_H
+#include "../common/types.h"
+#include "../gdt.h"
+#include "../hardwarecommunication/port.h"
+using myos::common::uint8_t;
+using myos::common::uint16_t;
+using myos::common::uint32_t;
+using myos::common::uint64_t;
+namespace myos {
+    namespace hardwarecommunication {
 
 class InterruptManager;
 
@@ -49,7 +55,7 @@ protected:
     Port8BitSlow picMasterCommand;
     Port8BitSlow picMasterData;
 public:
-    InterruptManager(GlobalDescriptorTable* gdt);
+    InterruptManager(myos::GlobalDescriptorTable* gdt);
     ~InterruptManager();
     void Activate();
     void Deactivate();
@@ -61,4 +67,6 @@ public:
     static void HandleInterruptRequest0x01();
     static void HandleInterruptRequest0x0C();
 };
+    }
+}
 #endif

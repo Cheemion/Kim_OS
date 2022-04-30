@@ -1,7 +1,10 @@
-#include "mouse.h"
-#include "types.h"
+#include "../../include/drivers/mouse.h"
 //! Default constructor
 
+
+using namespace myos::common;
+using namespace myos::drivers;
+using namespace myos::hardwarecommunication;
 MouseEventHandler::MouseEventHandler() {}
 void MouseEventHandler::OnActivate(){}
 void MouseEventHandler::OnMouseDown(uint8_t button){}
