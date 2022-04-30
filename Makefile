@@ -12,10 +12,10 @@ objects = obj/loader.o \
           obj/drivers/mouse.o \
           obj/kernel.o 
 obj/%.o: src/%.cpp
-	mkdir -p $(@0)
+	mkdir -p $(@D)
 	g++ $(GPPPARAMS) -o $@ -c $<
 obj/%.o: src/%.s
-	mkdir -p $(@0)
+	mkdir -p $(@D)
 	as $(ASPARAMS) -o $@ $<
 
 mykernel.bin: linker.ld $(objects)
