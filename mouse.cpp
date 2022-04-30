@@ -39,12 +39,12 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp) {
     if((!(status & 0x20)))
 	return esp;
 
-    static int8_t x = 40, y = 12;
     buffer[offset] = dataport.Read();
 
     if(handler == 0)
-    offset = (offset + 1) % 3;
+	return esp;
 
+    offset = (offset + 1) % 3;
     if(offset == 0) {
 	if(buffer[1] != 0 || buffer[2] != 0) {
 	    handler->OnMouseMove(buffer[1], -buffer[2]);
