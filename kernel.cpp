@@ -1,6 +1,7 @@
 #include "types.h"
 #include "gdt.h"
 #include "interrupts.h"
+#include "driver.h"
 #include "keyboard.h"
 #include "mouse.h"
 
@@ -45,18 +46,19 @@ extern "C" void callConstructors() {
 
 extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   printf("Hello World!\n");
-  printf("Welcome to KimOS\n");
   GlobalDescriptorTable gdt;
-  printf("done generating gdt\n");
   InterruptManager interrupts(&gdt);
-  printf("done generating nterruptManager\n");
+  printf("Initializing Hardware, Stage 1 \n");
 
-
+  DriverManager drvManager;
   KeyboardDriver keyboard(&interrupts);
+  drvManager.AddDriver(&keyboard);
   MouseDriver mouse(&interrupts);
+  drvManager.AddDriver(&mouse);
 
-
+  printf("Initializing Hardware, Stage 2 \n");
+  drvManager.ActivateAll();
+  printf("Initializing Hardware, Stage 3 \n");
   interrupts.Activate();
-  printf("done Activating\n");
   while(1);
 }

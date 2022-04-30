@@ -6,6 +6,11 @@ InterruptHandler(0x2C, manager),
 dataport(0x60)   ,
 commandport(0x64)
 {
+}
+//! Destructor
+MouseDriver::~MouseDriver() {}
+
+void MouseDriver::Activate() {
     offset = 0;
     buttons = 0;
     
@@ -24,9 +29,6 @@ commandport(0x64)
     dataport.Write(0xF4); // activate the mouse
     dataport.Read();
 }
-//! Destructor
-MouseDriver::~MouseDriver() {}
-
 void printf(char *);
 
 uint32_t MouseDriver::HandleInterrupt(uint32_t esp) {
@@ -64,3 +66,4 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp) {
     }
     return esp;
 }
+
