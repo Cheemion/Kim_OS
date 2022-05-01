@@ -8,9 +8,12 @@ objects = obj/loader.o \
           obj/hardwarecommunication/port.o \
           obj/hardwarecommunication/interruptstubs.o \
 	  obj/hardwarecommunication/interrupts.o \
+	  obj/hardwarecommunication/pci.o \
 	  obj/drivers/keyboard.o \
           obj/drivers/mouse.o \
-          obj/kernel.o 
+          obj/kernel.o
+
+
 obj/%.o: src/%.cpp
 	mkdir -p $(@D)
 	g++ $(GPPPARAMS) -o $@ -c $<
