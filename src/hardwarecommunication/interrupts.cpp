@@ -22,8 +22,7 @@ uint32_t InterruptHandler::HandleInterrupt(uint32_t esp) {
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
 InterruptManager* InterruptManager::ActiveInterruptManager = 0;
 void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
-    uint16_t CodeSegment, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t DescriptorType)
-{
+    uint16_t CodeSegment, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t DescriptorType) {
     // address of pointer to code segment (relative to global descriptor table)
     // and address of the handler (relative to segment)
     interruptDescriptorTable[interrupt].handlerAddressLowBits = ((uint32_t) handler) & 0xFFFF;

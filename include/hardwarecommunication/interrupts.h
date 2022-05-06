@@ -5,6 +5,7 @@
 #include "../hardwarecommunication/port.h"
 using myos::common::uint8_t;
 using myos::common::uint16_t;
+
 using myos::common::uint32_t;
 using myos::common::uint64_t;
 namespace myos {

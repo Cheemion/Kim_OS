@@ -10,6 +10,21 @@ using myos::hardwarecommunication::Port32Bit;
 namespace myos {
     namespace hardwarecommunication {
 
+	enum BaseAddressRegisterType{
+	    MemoryMapping = 0,
+	    InputOutput = 1
+	};
+
+
+
+	class BaseAddressRegister {
+	    public:
+	    bool prefetchable;
+	    myos::common::uint8_t* address;
+	    myos::common::uint32_t size;
+	    BaseAddressRegisterType type;
+	};
+	
 class PeripheralComponentInterconnectDeviceDescriptor {
 public:
     uint32_t portBase;
@@ -37,8 +52,10 @@ public:
     void Write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value);
     bool DeviceHashFunctions(uint16_t bus, uint16_t device);
 
-    void SelectDrivers(myos::drivers::DriverManager* driverManager);
+    void SelectDrivers(myos::drivers::DriverManager* driverManager, myos::hardwarecommunication::InterruptManager* interrupts);
     PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(uint16_t bus, uint16_t device, uint16_t function);
+    BaseAddressRegister GetBaseAddressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar);
+    myos::drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, myos::hardwarecommunication::InterruptManager* interrupts);
 };
     }
 }
