@@ -104,16 +104,12 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
 	case 0x1022: //AMD
 	    switch (dev.device_id) {
 		case 0x2000: //am79c973
+		    printf("AMD am79c973 ");
 		    break;
 		    
 	    }
 	    break;
 	case 0x8086: //intel
-	    switch (dev.device_id) {
-		case 0x2000: //am79c973
-		    break;
-		    
-	    }
 	    break;
     }
 
@@ -122,6 +118,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
 	case 0x03: // graphics
 	    switch (dev.subclass_id) {
 		case 0x00:
+		    printf("VGA ");
 		    break;
 	    }
 	    break;
