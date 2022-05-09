@@ -115,6 +115,17 @@ bool VideoGraphicsArray::SetMode(uint32_t widht, uint32_t height, uint32_t color
     WriteResigers(g_320x200x256);
     return true;
 }
+
+
 void VideoGraphicsArray::PutPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b){
     PutPixel(x,y,GetColorIndex(r, g, b));
+}
+
+void VideoGraphicsArray::FillRectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t r, uint8_t g, uint8_t b){
+    
+  for (int32_t Y = y; Y < y + h; Y++) {
+     for (int32_t X = 0; X < x+w; X++) {
+	 PutPixel(X,Y,r,g,b);
+     } 
+  }
 }
