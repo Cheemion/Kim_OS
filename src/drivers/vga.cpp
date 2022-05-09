@@ -91,7 +91,7 @@ bool VideoGraphicsArray::SupportsMode(uint32_t widht, uint32_t height, uint32_t 
     return widht == 320 && height == 200 && colordepth == 8;
 }
 bool VideoGraphicsArray::SetMode(uint32_t widht, uint32_t height, uint32_t colordepth){
-    if(!SupportsMode(widht, height, colordepth));
+    if(!SupportsMode(widht, height, colordepth))
 	return false;
     unsigned char g_320x200x256[] = {
 				    /* MISC */
