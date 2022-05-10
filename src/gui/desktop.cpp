@@ -14,6 +14,7 @@ Desktop::~Desktop(){}
 void Desktop::Draw(common::GraphicsContext* gc){
 
     CompositeWidget::Draw(gc);
+
     for(int i = 0;i<4;i++) {
 	gc->PutPixel(MouseX-i, MouseY, 0xFF, 0xFF, 0xFF);
 	gc->PutPixel(MouseX+i, MouseY, 0xFF, 0xFF, 0xFF);

@@ -141,8 +141,9 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
 
 
   vga.SetMode(320, 200, 8);
-  Desktop desktop(320,200,0x00,0x00,0xAB);
+  Desktop desktop(320,200,0x00,0x00,0xA8);
   vga.FillRectangle(0, 0, 320, 200, 0x00, 0x00, 0xA8);
+
   desktop.Draw(&vga);
   
   while(1);
