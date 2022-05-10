@@ -115,36 +115,34 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   InterruptManager interrupts(&gdt);
   printf("Initializing Hardware, Stage 1 \n");
 
+  Desktop desktop(320,200,0x00,0x00,0xA8);
   DriverManager drvManager;
 
-  PrintfKeyboardEverntHandler kbhandler;
-  KeyboardDriver keyboard(&interrupts, &kbhandler);
+
+  // PrintfKeyboardEverntHandler kbhandler;
+  //KeyboardDriver keyboard(&interrupts, &kbhandler);
+  KeyboardDriver keyboard(&interrupts, &desktop);
   drvManager.AddDriver(&keyboard);
 
-  MouseToConsole mouseHandler;
-  MouseDriver mouse(&interrupts, &mouseHandler);
+  //MouseToConsole mouseHandler;
+  //MouseDriver mouse(&interrupts, &mouseHandler);
+  MouseDriver mouse(&interrupts, &desktop);
   drvManager.AddDriver(&mouse);
 
   PeripheralComponentInterconnectController PCIController;
   PCIController.SelectDrivers(&drvManager, &interrupts);
 
   VideoGraphicsArray vga;
-
-  
-
   
   printf("Initializing Hardware, Stage 2 \n");
   drvManager.ActivateAll();
   printf("Initializing Hardware, Stage 3 \n");
-  interrupts.Activate();
-
-
 
   vga.SetMode(320, 200, 8);
-  Desktop desktop(320,200,0x00,0x00,0xA8);
-  vga.FillRectangle(0, 0, 320, 200, 0x00, 0x00, 0xA8);
 
-  desktop.Draw(&vga);
+  interrupts.Activate();
   
-  while(1);
+  while(1){
+    desktop.Draw(&vga);
+  }
 }
