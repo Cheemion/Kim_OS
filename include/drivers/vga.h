@@ -27,7 +27,7 @@ namespace myos {
 	    public:
 	    VideoGraphicsArray();
 	    virtual void PutPixel(uint32_t x, uint32_t y, uint8_t colorIndex);
-	    virtual ~VideoGraphicsArray();
+	    ~VideoGraphicsArray();
 	    virtual bool SupportsMode(uint32_t widht, uint32_t height, uint32_t colordepth);
 	    virtual bool SetMode(uint32_t widht, uint32_t height, uint32_t colordepth);
 	    virtual void PutPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b);

@@ -83,9 +83,7 @@ VideoGraphicsArray::VideoGraphicsArray() :
     attributeControllerResetPort(0x3da)
 {
 }
-
-
-VideoGraphicsArray::~VideoGraphicsArray() {}
+VideoGraphicsArray::~VideoGraphicsArray(){}
 
 bool VideoGraphicsArray::SupportsMode(uint32_t widht, uint32_t height, uint32_t colordepth){
     return widht == 320 && height == 200 && colordepth == 8;

@@ -137,6 +137,6 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   interrupts.Activate();
   vga.SetMode(320, 200, 8);
   vga.FillRectangle(0, 0, 320, 200, 0x00, 0x00, 0xA8);
-  
+   
   while(1);
 }
