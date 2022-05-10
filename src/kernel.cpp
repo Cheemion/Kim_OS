@@ -6,11 +6,13 @@
 #include "../include/drivers/keyboard.h"
 #include "../include/drivers/mouse.h"
 #include "../include/drivers/vga.h"
+#include "../include/gui/desktop.h"
 
 using namespace myos;
 using namespace myos::common;
 using namespace myos::drivers;
 using namespace myos::hardwarecommunication;
+using namespace myos::gui;
 
 // the screen is 25 height * 80 width
 void printf(char* str) {
@@ -135,8 +137,13 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   drvManager.ActivateAll();
   printf("Initializing Hardware, Stage 3 \n");
   interrupts.Activate();
+
+
+
   vga.SetMode(320, 200, 8);
+  Desktop desktop(320,200,0x00,0x00,0xAB);
   vga.FillRectangle(0, 0, 320, 200, 0x00, 0x00, 0xA8);
-   
+  desktop.Draw(&vga);
+  
   while(1);
 }
