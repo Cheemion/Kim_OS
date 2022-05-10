@@ -65,14 +65,13 @@ void VideoGraphicsArray::PutPixel(int32_t x, int32_t y, uint8_t colorIndex){
     *pixelAddress = colorIndex;
 }
 
-
-
-uint8_t VideoGraphicsArray::GetColorIndex(uint8_t r, uint8_t g, uint8_t b){
-    if(r == 0x00 && g == 0x00 && b == 0x00) return 0x00;
-    if(r == 0x00 && g == 0x00 && b == 0xA8) return 0x01;
-    if(r == 0x00 && g == 0xAB && b == 0x00) return 0x02;
-    if(r == 0xAB && g == 0x00 && b == 0x00) return 0x04;
-    if(r == 0xFF && g == 0xFF && b == 0xFF) return 0x3F;
+uint8_t VideoGraphicsArray::GetColorIndex(uint8_t r, uint8_t g, uint8_t b)
+{
+    if(r == 0x00 && g == 0x00 && b == 0x00) return 0x00; // black
+    if(r == 0x00 && g == 0x00 && b == 0xA8) return 0x01; // blue
+    if(r == 0x00 && g == 0xA8 && b == 0x00) return 0x02; // green
+    if(r == 0xA8 && g == 0x00 && b == 0x00) return 0x04; // red
+    if(r == 0xFF && g == 0xFF && b == 0xFF) return 0x3F; // white
     return 0x00;
 }
 

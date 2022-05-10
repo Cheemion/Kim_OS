@@ -10,6 +10,7 @@ Widget::Widget(Widget *parent, common::int32_t x, common::int32_t y,
     : myos::drivers::KeyboardEventHandler()    {
     this->parent =  parent;
     this->x = x;
+
     this->y = y;
     this->w = w;
     this->h = h;
