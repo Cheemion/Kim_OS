@@ -1,4 +1,5 @@
 #include "../../include/hardwarecommunication/interrupts.h"
+using namespace myos;
 using namespace myos::common;
 using namespace myos::hardwarecommunication;
 void printf(char *str);
@@ -35,12 +36,14 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
 }
 
 
-InterruptManager::InterruptManager(GlobalDescriptorTable *gdt) :
+InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable *gdt, myos::TaskManager* taskManager) :
 picMasterCommand(0x20),
 picMasterData(0x21),
 picSlaveCommand(0xA0),
 picSlaveData(0xA1)
 {
+    this->taskManager = taskManager;
+    this->hardwareInterruptOffset = hardwareInterruptOffset;
     uint32_t CodeSegment = gdt->CodeSegmentSelector();
     const uint8_t IDT_INTERRUPT_GATE = 0xE; // this means interrupt Gate
 
@@ -57,8 +60,8 @@ picSlaveData(0xA1)
     picMasterCommand.Write(0x11);
     picSlaveCommand.Write(0x11);
 
-    picMasterData.Write(0x20); // any interrupt, ad 0x20 to it , range from 0x20 to 0x27
-    picSlaveData.Write(0x28); // any interrupt, ad 0x28 to it, the same
+    picMasterData.Write(hardwareInterruptOffset); // any interrupt, ad 0x20 to it , range from 0x20 to 0x27
+    picSlaveData.Write(hardwareInterruptOffset+8); // any interrupt, ad 0x28 to it, the same
     
     picMasterData.Write(0x04); // telling this is the master 
     picSlaveData.Write(0x02); // telling this is the slave
@@ -103,6 +106,10 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interruptNumber, uint32_t e
 	printfHex(interruptNumber);
     } 
 
+    if(interruptNumber == hardwareInterruptOffset){
+	esp = (uint32_t)taskManager->Schedule((CPUState*) esp);
+    }
+    
     if(0x20 <= interruptNumber && interruptNumber < 0x30) {
 	picMasterCommand.Write(0x20);
 	if(0x28 <= interruptNumber)

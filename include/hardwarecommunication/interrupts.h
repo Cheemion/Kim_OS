@@ -2,6 +2,7 @@
 #define __MYOS__HARDWARECOMMUNICSTION__INTERRUPTS_H
 #include "../common/types.h"
 #include "../gdt.h"
+#include "../multitasking.h"
 #include "../hardwarecommunication/port.h"
 using myos::common::uint8_t;
 using myos::common::uint16_t;
@@ -30,6 +31,7 @@ friend class InterruptHandler;
 protected:
     static InterruptManager* ActiveInterruptManager;
     InterruptHandler* handlers[256];
+    TaskManager* taskManager;
     // see IDT descriptor
     struct GateDescriptor {
 	uint16_t handlerAddressLowBits;
@@ -45,7 +47,7 @@ protected:
 	uint16_t size;
 	uint32_t base;
     } __attribute__((packed));
-
+    uint16_t hardwareInterruptOffset;
     static void SetInterruptDescriptorTableEntry(uint8_t interruptNumber,
 						 uint16_t codeSegmentSelectorOffset,
 						 void (*handler)(),
@@ -56,7 +58,7 @@ protected:
     Port8BitSlow picMasterCommand;
     Port8BitSlow picMasterData;
 public:
-    InterruptManager(myos::GlobalDescriptorTable* gdt);
+    InterruptManager(uint16_t hardwareInterruptOffset,myos::GlobalDescriptorTable* gdt, myos::TaskManager* taskManager);
     ~InterruptManager();
     void Activate();
     void Deactivate();

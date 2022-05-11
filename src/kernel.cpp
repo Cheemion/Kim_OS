@@ -8,12 +8,19 @@
 #include "../include/drivers/vga.h"
 #include "../include/gui/desktop.h"
 #include "../include/gui/window.h"
+#include "../include/multitasking.h"
+
+
+//#define GRAPHICSMODE
+
 
 using namespace myos;
 using namespace myos::common;
 using namespace myos::drivers;
 using namespace myos::hardwarecommunication;
 using namespace myos::gui;
+
+
 
 // the screen is 25 height * 80 width
 void printf(char* str) {
@@ -52,6 +59,14 @@ void printfHex(uint8_t key) {
     printf(foo);
 }
 
+void taskB(){
+    while(true)
+	printf("B");
+}
+void taskA(){
+    while(true)
+	printf("A");
+}
 class PrintfKeyboardEverntHandler : public KeyboardEventHandler {
 public:
     void OnKeyDown(char c){
@@ -113,21 +128,38 @@ extern "C" void callConstructors() {
 extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   printf("Hello World!\n");
   GlobalDescriptorTable gdt;
-  InterruptManager interrupts(&gdt);
+
+
+  TaskManager taskManager;
+  Task task1(&gdt, taskA);
+  Task task2(&gdt, taskA);
+  taskManager.AddTask(&task1);
+  taskManager.AddTask(&task2);
+
+  InterruptManager interrupts(0x20, &gdt, &taskManager);
   printf("Initializing Hardware, Stage 1 \n");
 
+#ifdef GRAPHICSMODE
   Desktop desktop(320,200,0x00,0x00,0xA8);
+#endif
+
   DriverManager drvManager;
 
-
-  // PrintfKeyboardEverntHandler kbhandler;
-  //KeyboardDriver keyboard(&interrupts, &kbhandler);
+#ifdef GRAPHICSMODE
   KeyboardDriver keyboard(&interrupts, &desktop);
+#else
+  PrintfKeyboardEverntHandler kbhandler;
+  KeyboardDriver keyboard(&interrupts, &kbhandler);
+#endif
   drvManager.AddDriver(&keyboard);
 
-  //MouseToConsole mouseHandler;
-  //MouseDriver mouse(&interrupts, &mouseHandler);
+
+#ifdef GRAPHICSMODE
   MouseDriver mouse(&interrupts, &desktop);
+#else
+  MouseToConsole mouseHandler;
+  MouseDriver mouse(&interrupts, &mouseHandler);
+#endif
   drvManager.AddDriver(&mouse);
 
   PeripheralComponentInterconnectController PCIController;
@@ -139,15 +171,19 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   drvManager.ActivateAll();
   printf("Initializing Hardware, Stage 3 \n");
 
-  vga.SetMode(320, 200, 8);
 
+#ifdef GRAPHICSMODE
+  vga.SetMode(320, 200, 8);
   Window win1(&desktop, 10, 10, 20, 20, 0xA8, 0x00,0x00);
   desktop.AddChild(&win1);
   Window win2(&desktop, 40, 15, 30, 30, 0x00, 0xA8,0x00);
   desktop.AddChild(&win2);
-  interrupts.Activate();
+#endif
   
+  interrupts.Activate();
   while(1){
-    desktop.Draw(&vga);
+    #ifdef GRAPHICSMODE
+	desktop.Draw(&vga);
+    #endif
   }
 }
