@@ -132,7 +132,7 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
 
   TaskManager taskManager;
   Task task1(&gdt, taskA);
-  Task task2(&gdt, taskA);
+  Task task2(&gdt, taskB);
   taskManager.AddTask(&task1);
   taskManager.AddTask(&task2);
 
