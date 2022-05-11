@@ -28,12 +28,6 @@ HandleInterruptRequest 0x0C
 	
 int_bottom:
 
-	#pusha
-	#pushl %ds
-	#pushl %es
-	#pushl %fs
-	#pushl %gs
-
 	pushl %ebp
 	pushl %edi
 	pushl %esi
@@ -41,29 +35,22 @@ int_bottom:
 	pushl %ecx
 	pushl %ebx
 	pushl %eax
-	
 	
 	#call c++ handler
 	pushl %esp
 	pushl (interruptnumber)
 	call _ZN4myos21hardwarecommunication16InterruptManager15handleInterruptEhj
-	# addl $5, %esp
 	movl %eax, %esp	# switch the stack 
 
-	pushl %eax
-	pushl %ebx
-	pushl %ecx
-	pushl %edx
-	pushl %esi
-	pushl %edi
-	pushl %ebp
-	#popl %gs
-	#popl %fs
-	#popl %es
-	#popl %ds
-	#popa
+	popl %eax
+	popl %ebx
+	popl %ecx
+	popl %edx
+	popl %esi
+	popl %edi
+	popl %ebp
 
-	add $4, %esp
+	add $4, %esp #previous push 0, to count offset
 
 .global _ZN4myos21hardwarecommunication16InterruptManager22IgnoreInterruptRequestEv
 _ZN4myos21hardwarecommunication16InterruptManager22IgnoreInterruptRequestEv:	

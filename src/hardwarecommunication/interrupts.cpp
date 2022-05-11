@@ -47,10 +47,12 @@ picSlaveData(0xA1)
     uint32_t CodeSegment = gdt->CodeSegmentSelector();
     const uint8_t IDT_INTERRUPT_GATE = 0xE; // this means interrupt Gate
 
-    for(uint16_t i = 0; i < 256; i++) {
-	handlers[i] = 0;
+    for(uint8_t i = 255; i > 0; --i) {
 	SetInterruptDescriptorTableEntry(i, CodeSegment, &IgnoreInterruptRequest, 0, IDT_INTERRUPT_GATE);
+	handlers[i] = 0;
     }
+    SetInterruptDescriptorTableEntry(0, CodeSegment, &IgnoreInterruptRequest, 0, IDT_INTERRUPT_GATE);
+    handlers[0] = 0;
 
     SetInterruptDescriptorTableEntry(0x20, CodeSegment, &HandleInterruptRequest0x00, 0, IDT_INTERRUPT_GATE);
     SetInterruptDescriptorTableEntry(0x21, CodeSegment, &HandleInterruptRequest0x01, 0, IDT_INTERRUPT_GATE);

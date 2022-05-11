@@ -5,7 +5,7 @@
 namespace myos {
     struct CPUState{
 
-	// what we push in the interrupt stop
+	// what we push in the interruptstop assembler files
 	common::uint32_t eax; //register accmulator
 	common::uint32_t ebx; // base resiger
 	common::uint32_t ecx; // count register
@@ -32,13 +32,13 @@ namespace myos {
     } __attribute__((packed));
     
     class Task{
-    friend class TaskManager;
-    private:
-	common::uint8_t stack[4096];
-	CPUState* cpustate;
-    public:
-	Task(GlobalDescriptorTable* gdt, void entrypoint());
-	~Task();
+	friend class TaskManager;
+	private:
+	    common::uint8_t stack[4096];
+	    CPUState* cpustate;
+	public:
+	    Task(GlobalDescriptorTable* gdt, void entrypoint());
+	    ~Task();
     };
 
     class TaskManager{
