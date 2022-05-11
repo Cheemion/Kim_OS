@@ -1,0 +1,56 @@
+#ifndef __MYOS__MULTITASKING_H
+#define __MYOS__MULTITASKING_H
+#include "common/types.h"
+#include "gdt.h"
+namespace myos {
+    struct CPUState{
+
+	// what we push in the interrupt stop
+	common::uint32_t eax; //register accmulator
+	common::uint32_t ebx; // base resiger
+	common::uint32_t ecx; // count register
+	common::uint32_t edx; // data register
+	
+	common::uint32_t esi; // stack index
+	common::uint32_t edi; // data index
+	common::uint32_t ebp; // stack base point
+
+	// common::uint32_t gs; 
+	// common::uint32_t fs;
+	// common::uint32_t es;
+	// common::uint32_t ds;
+	
+	common::uint32_t error;
+
+	// below are push by processor
+	common::uint32_t eip;
+	common::uint32_t cs; 
+	common::uint32_t eflags; 
+	common::uint32_t esp;
+	common::uint32_t ss;
+
+    } __attribute__((packed));
+    
+    class Task{
+    friend class TaskManager;
+    private:
+	common::uint8_t stack[4096];
+	CPUState* cpustate;
+    public:
+	Task(GlobalDescriptorTable* gdt, void entrypoint());
+	~Task();
+    };
+
+    class TaskManager{
+    private:
+	Task* tasks[256];
+	int numTasks;
+	int currentTask;
+	public:
+	TaskManager();
+	~TaskManager();
+	bool AddTask(Task* task);
+	CPUState* Schedule(CPUState* cpustate);
+    };
+}
+#endif
