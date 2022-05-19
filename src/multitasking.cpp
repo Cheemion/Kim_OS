@@ -2,11 +2,11 @@
 using namespace myos;
 using namespace myos::common;
 
-
 TaskManager::TaskManager(){
     numTasks = 0;
     currentTask = -1;
 }
+
 TaskManager::~TaskManager(){}
 
 bool TaskManager::AddTask(Task* task){
@@ -15,16 +15,21 @@ bool TaskManager::AddTask(Task* task){
     tasks[numTasks++] = task;
     return true;
 }
+
+// save previous state, and return next task state
 CPUState* TaskManager::Schedule(CPUState* cpustate){
     if(numTasks <= 0)
 	return cpustate;
+
     if(currentTask >= 0)
 	tasks[currentTask]->cpustate = cpustate;
 
     if(++currentTask >= numTasks)
 	currentTask %= numTasks;
+
     return tasks[currentTask]->cpustate;
 }
+
 Task::Task(GlobalDescriptorTable* gdt, void entrypoint()){
     cpustate = (CPUState*)(stack + 4096 - sizeof(CPUState));
     cpustate -> eax = 0;
@@ -50,4 +55,5 @@ Task::Task(GlobalDescriptorTable* gdt, void entrypoint()){
     cpustate -> eflags = 0x202;
 
 }
+
 Task::~Task(){}

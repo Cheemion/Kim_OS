@@ -130,6 +130,7 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   GlobalDescriptorTable gdt;
 
 
+  
   TaskManager taskManager;
   Task task1(&gdt, taskA);
   Task task2(&gdt, taskB);

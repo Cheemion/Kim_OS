@@ -17,7 +17,7 @@ _ZN4myos21hardwarecommunication16InterruptManager16HandleException\num\()Ev:
 .global _ZN4myos21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev
 _ZN4myos21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev:
 	movb $\num + IRQ_BASE, (interruptnumber)
-	pushl $0
+	pushl $0         #this is for error code, Exception will push this automatically but interrupt won't
 	jmp int_bottom
 .endm
 

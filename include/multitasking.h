@@ -3,14 +3,13 @@
 #include "common/types.h"
 #include "gdt.h"
 namespace myos {
-    struct CPUState{
 
+    struct CPUState {
 	// what we push in the interruptstop assembler files
 	common::uint32_t eax; //register accmulator
 	common::uint32_t ebx; // base resiger
 	common::uint32_t ecx; // count register
 	common::uint32_t edx; // data register
-	
 	common::uint32_t esi; // stack index
 	common::uint32_t edi; // data index
 	common::uint32_t ebp; // stack base point
@@ -41,7 +40,7 @@ namespace myos {
 	    ~Task();
     };
 
-    class TaskManager{
+    class TaskManager {
     private:
 	Task* tasks[256];
 	int numTasks;

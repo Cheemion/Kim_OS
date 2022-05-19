@@ -22,8 +22,7 @@ uint32_t InterruptHandler::HandleInterrupt(uint32_t esp) {
 
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
 InterruptManager* InterruptManager::ActiveInterruptManager = 0;
-void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
-    uint16_t CodeSegment, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t DescriptorType) {
+void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt, uint16_t CodeSegment, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t DescriptorType) {
     // address of pointer to code segment (relative to global descriptor table)
     // and address of the handler (relative to segment)
     interruptDescriptorTable[interrupt].handlerAddressLowBits = ((uint32_t) handler) & 0xFFFF;
@@ -54,9 +53,9 @@ picSlaveData(0xA1)
     SetInterruptDescriptorTableEntry(0, CodeSegment, &IgnoreInterruptRequest, 0, IDT_INTERRUPT_GATE);
     handlers[0] = 0;
 
-    SetInterruptDescriptorTableEntry(0x20, CodeSegment, &HandleInterruptRequest0x00, 0, IDT_INTERRUPT_GATE);
-    SetInterruptDescriptorTableEntry(0x21, CodeSegment, &HandleInterruptRequest0x01, 0, IDT_INTERRUPT_GATE);
-    SetInterruptDescriptorTableEntry(0x2C, CodeSegment, &HandleInterruptRequest0x0C, 0, IDT_INTERRUPT_GATE);
+    SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x00, CodeSegment, &HandleInterruptRequest0x00, 0, IDT_INTERRUPT_GATE);
+    SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x01, CodeSegment, &HandleInterruptRequest0x01, 0, IDT_INTERRUPT_GATE);
+    SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x02, CodeSegment, &HandleInterruptRequest0x0C, 0, IDT_INTERRUPT_GATE);
 
     // a bunch of settings
     picMasterCommand.Write(0x11);
@@ -89,7 +88,6 @@ void InterruptManager::Deactivate(){
 }
 
 void InterruptManager::Activate(){
-
     if(ActiveInterruptManager != 0)
 	ActiveInterruptManager->Deactivate();
     
@@ -107,14 +105,15 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interruptNumber, uint32_t e
 	printf("UNHANDLED INTERRUPT 0x");
 	printfHex(interruptNumber);
     } 
-
+    //if it is timer interrupt
     if(interruptNumber == hardwareInterruptOffset){
 	esp = (uint32_t)taskManager->Schedule((CPUState*) esp);
     }
-    
-    if(0x20 <= interruptNumber && interruptNumber < 0x30) {
+
+    //hardware interrupts must be acknowledged
+    if(hardwareInterruptOffset <= interruptNumber && interruptNumber < hardwareInterruptOffset + 16) {
 	picMasterCommand.Write(0x20);
-	if(0x28 <= interruptNumber)
+	if(hardwareInterruptOffset + 8 <= interruptNumber)
 	    picSlaveCommand.Write(0x20);
     }
     return esp;
