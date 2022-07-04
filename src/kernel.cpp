@@ -187,4 +187,6 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
 	desktop.Draw(&vga);
     #endif
   }
+
+
 }
