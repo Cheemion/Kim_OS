@@ -17,7 +17,7 @@ public:
     virtual void OnKeyUp(char);
 };
 
-	class KeyboardDriver : public myos::hardwarecommunication::InterruptHandler, public Driver
+class KeyboardDriver : public myos::hardwarecommunication::InterruptHandler, public Driver
 {
     myos::hardwarecommunication::Port8Bit dataport;
     myos::hardwarecommunication::Port8Bit commandport;
