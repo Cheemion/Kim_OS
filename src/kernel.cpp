@@ -184,7 +184,7 @@ extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   interrupts.Activate();
   while(1){
     #ifdef GRAPHICSMODE
-	desktop.Draw(&vga);
+    desktop.Draw(&vga);
     #endif
   }
 
