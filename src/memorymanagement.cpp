@@ -42,7 +42,7 @@ void* MemoryManager::malloc(common::size_t size)
 
     if(result->size >= size + sizeof(MemoryChunk) + 1)
     {
-        MemoryChunk* temp = (MemoryChunk*)((size_t)result + sizeof(MemoryChunk) + size);
+        MemoryChunk* temp = (MemoryChunk*)((common::size_t)result + sizeof(MemoryChunk) + size);
         temp->allocated = false;
         temp->size = result->size -size -sizeof(MemoryChunk);
         temp->prev = result;
@@ -55,12 +55,12 @@ void* MemoryManager::malloc(common::size_t size)
         result->next = temp;
     }
     result->allocated = true;
-    return (void*)(((size_t)result) + sizeof(MemoryChunk));
+    return (void*)(((common::size_t)result) + sizeof(MemoryChunk));
 }
 
 void MemoryManager::free(void* ptr)
 {
-    MemoryChunk* chunk = (MemoryChunk*)((size_t)ptr - sizeof(MemoryChunk));
+    MemoryChunk* chunk = (MemoryChunk*)((common::size_t)ptr - sizeof(MemoryChunk));
     chunk->allocated = false;
     if(chunk->prev != 0 &&!chunk->prev->allocated)
     {
