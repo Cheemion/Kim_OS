@@ -9,7 +9,7 @@
 #include "../include/gui/desktop.h"
 #include "../include/gui/window.h"
 #include "../include/multitasking.h"
-#include <memorymanagement.h>
+#include "../include/memorymanagement.h"
 
 //#define GRAPHICSMODE
 

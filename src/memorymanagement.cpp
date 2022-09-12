@@ -1,9 +1,11 @@
-#include "memorymanagement.h"
+#include "../include/memorymanagement.h"
+
+using namespace myos;
 namespace myos{
 
 MemoryManager* MemoryManager::activeMemoryManager;
 
-MemoryManager::MemoryManager(size_t start, size_t size)
+MemoryManager::MemoryManager(common::size_t start, common::size_t size)
 {
     activeMemoryManager = this;
     if(size < sizeof(MemoryChunk))
@@ -26,7 +28,7 @@ MemoryManager::~MemoryManager()
         activeMemoryManager = 0;
 }
 
-void* MemoryManager::malloc(size_t size)
+void* MemoryManager::malloc(common::size_t size)
 {
     MemoryChunk* result = 0;
     for(MemoryChunk* chunk = first; chunk != 0 && result == 0; chunk = chunk->next)
@@ -75,7 +77,6 @@ void MemoryManager::free(void* ptr)
         chunk->next = chunk->next->next;
         if(chunk->next != 0)
            chunk->next->prev = chunk;
-            
     }
 }
 
