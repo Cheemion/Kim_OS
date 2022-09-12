@@ -9,7 +9,7 @@
 #include "../include/gui/desktop.h"
 #include "../include/gui/window.h"
 #include "../include/multitasking.h"
-
+#include <memorymanagement.h>
 
 //#define GRAPHICSMODE
 
@@ -19,7 +19,6 @@ using namespace myos::common;
 using namespace myos::drivers;
 using namespace myos::hardwarecommunication;
 using namespace myos::gui;
-
 
 
 // the screen is 25 height * 80 width
@@ -128,14 +127,26 @@ extern "C" void callConstructors() {
 extern "C" void kernelMain(void* multiboot_struct, uint32_t magicnumber) {
   printf("Hello World!\n");
   GlobalDescriptorTable gdt;
-
-
-  
+  uint32_t* memupper = (uint32_t*)(((common::size_t)multiboot_struct) + 8);
+  common::size_t heap = 10*1024*1024;
+  MemoryManager memoryManager(heap, (*memupper)*1024 - heap - 10*1024);
+  printf("heap:0x");
+  printfHex((heap>>24) & 0xFF);
+  printfHex((heap>>16) & 0xFF);
+  printfHex((heap>>8) & 0xFF);
+  printfHex((heap) & 0xFF);
+  void* allocated = memoryManager.malloc(1024);
+  printf("\nallocated:0x");
+  printfHex(((common::size_t)allocated>>24) & 0xFF);
+  printfHex(((common::size_t)allocated>>16) & 0xFF);
+  printfHex(((common::size_t)allocated>>8) & 0xFF);
+  printfHex(((common::size_t)allocated) & 0xFF);
+  printf("\n");
   TaskManager taskManager;
-  Task task1(&gdt, taskA);
-  Task task2(&gdt, taskB);
-  taskManager.AddTask(&task1);
-  taskManager.AddTask(&task2);
+  // Task task1(&gdt, taskA);
+  // Task task2(&gdt, taskB);
+  // taskManager.AddTask(&task1);
+  // taskManager.AddTask(&task2);
 
   InterruptManager interrupts(0x20, &gdt, &taskManager);
   printf("Initializing Hardware, Stage 1 \n");

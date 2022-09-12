@@ -50,7 +50,7 @@ int_bottom:
 	popl %edi
 	popl %ebp
 
-	add $4, %esp #previous push 0, to count offset
+	add $4, %esp #previous push 0, to count offset, its actually the error flag in the CPUState
 
 .global _ZN4myos21hardwarecommunication16InterruptManager22IgnoreInterruptRequestEv
 _ZN4myos21hardwarecommunication16InterruptManager22IgnoreInterruptRequestEv:	
