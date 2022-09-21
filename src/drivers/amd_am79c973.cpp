@@ -6,7 +6,7 @@ using namespace myos::hardwarecommunication;
 
 amd_am79c973::amd_am79c973(myos::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor *dev,
         myos::hardwarecommunication::InterruptManager* interrupts)
-        : Driver(), InterruptHandler(interrupts, dev->interrupt + interrupts->hardwareInterruptOffset),
+        : Driver(), InterruptHandler(dev->interrupt + interrupts->hardwareInterruptOffset, interrupts),
             MACAddress0Port(dev->portBase),
             MACAddress2Port(dev->portBase + 0x02),
             MACAddress4Port(dev->portBase + 0x04),
