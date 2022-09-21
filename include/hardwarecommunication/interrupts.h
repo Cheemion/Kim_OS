@@ -4,6 +4,7 @@
 #include "../gdt.h"
 #include "../multitasking.h"
 #include "../hardwarecommunication/port.h"
+
 using myos::common::uint8_t;
 using myos::common::uint16_t;
 
@@ -28,7 +29,7 @@ public:
 
 class InterruptManager {
 friend class InterruptHandler;
-protected:
+public:
     static InterruptManager* ActiveInterruptManager;
     InterruptHandler* handlers[256];
     TaskManager* taskManager;

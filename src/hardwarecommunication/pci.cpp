@@ -1,4 +1,5 @@
 #include "../../include/hardwarecommunication/pci.h"
+#include <drivers/amd_am79c973.h>
 using namespace myos::common;
 using namespace myos::hardwarecommunication;
 using namespace myos::drivers;
@@ -53,33 +54,35 @@ void PeripheralComponentInterconnectController::SelectDrivers(myos::drivers::Dri
     for(int bus = 0; bus < 8; bus++)
 	for(int device = 0; device < 32; device++) {
 	    int numFunctions = DeviceHashFunctions(bus, device) ? 8 : 1;
-	    for(int function = 0; function < numFunctions; function++)  {
-		PeripheralComponentInterconnectDeviceDescriptor dev = GetDeviceDescriptor(bus, device, function);
-		if(dev.vendor_id == 0x0000 || dev.vendor_id == 0xFFFF)
-		    continue;
+	    for(int function = 0; function < numFunctions; function++)  
+		{
+			PeripheralComponentInterconnectDeviceDescriptor dev = GetDeviceDescriptor(bus, device, function);
+			if(dev.vendor_id == 0x0000 || dev.vendor_id == 0xFFFF)
+				continue;
 
-		for(int barNum = 0; barNum < 6; barNum++) {
-		    BaseAddressRegister bar = GetBaseAddressRegister(bus, device, function, barNum);
-		    if(bar.address && (bar.type == InputOutput))
-			dev.portBase = (uint32_t)bar.address;
-		    Driver* driver = GetDriver(dev, interrupts);
-		    if(driver != 0)
+			for(int barNum = 0; barNum < 6; barNum++) {
+				BaseAddressRegister bar = GetBaseAddressRegister(bus, device, function, barNum);
+				if(bar.address && (bar.type == InputOutput))
+				dev.portBase = (uint32_t)bar.address;
+			}
+			Driver* driver = GetDriver(dev, interrupts);
+			if(driver != 0)
 			driverManager->AddDriver(driver);
+
+			printf("PCI BUS ");
+			printfHex(bus & 0xFF);
+			printf(", DEVICE ");
+			printfHex(device & 0xFF);
+			printf(", FUNCTION ");
+			printfHex(function & 0xFF);
+			printf("= VENDOR ");
+			printfHex((dev.vendor_id & 0xFF00) >> 8);
+			printfHex((dev.vendor_id & 0xFF));
+			printf(", DEVICE ");
+			printfHex((dev.device_id & 0xFF00) >> 8);
+			printfHex((dev.device_id & 0xFF));
+			printf("\n");
 		}
-		printf("PCI BUS ");
-		printfHex(bus & 0xFF);
-		printf(", DEVICE ");
-		printfHex(device & 0xFF);
-		printf(", FUNCTION ");
-		printfHex(function & 0xFF);
-		printf("= VENDOR ");
-		printfHex((dev.vendor_id & 0xFF00) >> 8);
-		printfHex((dev.vendor_id & 0xFF));
-		printf(", DEVICE ");
-		printfHex((dev.device_id & 0xFF00) >> 8);
-		printfHex((dev.device_id & 0xFF));
-		printf("\n");
-	    }
 	}
 }
 
@@ -99,18 +102,22 @@ PeripheralComponentInterconnectDeviceDescriptor  PeripheralComponentInterconnect
 }
 
 Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, myos::hardwarecommunication::InterruptManager* interrupts) {
-
+	Driver* driver = 0;
     switch (dev.vendor_id) {
-	case 0x1022: //AMD
-	    switch (dev.device_id) {
-		case 0x2000: //am79c973
-		    printf("AMD am79c973 ");
-		    break;
-		    
-	    }
-	    break;
-	case 0x8086: //intel
-	    break;
+		case 0x1022: //AMD
+			switch (dev.device_id) 
+			{
+				case 0x2000: //am79c973
+					printf("AMD am79c973 ");
+					driver = (Driver*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));
+					if(driver != 0)	
+						new (driver) amd_am79c973(&dev, interrupts);
+					return driver;
+					break;
+			}
+			break;
+		case 0x8086: //intel
+			break;
     }
 
 
@@ -124,7 +131,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
 	    break;
     }
     
-    return 0;
+    return driver;
 }
 
 BaseAddressRegister  PeripheralComponentInterconnectController::GetBaseAddressRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar){

@@ -4,6 +4,7 @@
 #include "interrupts.h"
 #include "../common/types.h"
 #include "../drivers/driver.h"
+#include "../memorymanagement.h"
 
 using myos::hardwarecommunication::Port32Bit;
 
